@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import Errores from './Errores';
 import shortid from 'shortid';
 
-const Formulario = ({agregarNuevoGasto}) => {
+const Formulario = ({guardarGasto, guardarCrearGasto}) => {
 
   // State
 
-  const [ nombreGasto, guardarNombre ] = useState('');
-  const [ cantidadGasto, guardarGasto ] = useState(0);
+  const [ nombre, guardarNombre ] = useState('');
+  const [ cantidad, guardarCantidad ] = useState(0);
   const [ error, guardarError ] = useState(false);
 
   // Cuando el usuario agrega un gasto
@@ -15,7 +15,7 @@ const Formulario = ({agregarNuevoGasto}) => {
     e.preventDefault();
 
     // Validar
-    if(cantidadGasto < 1 || isNaN(cantidadGasto) || nombreGasto.trim() === '') {
+    if(cantidad < 1 || isNaN(cantidad) || nombre.trim() === '') {
       guardarError(true);
       return;
     }
@@ -25,19 +25,20 @@ const Formulario = ({agregarNuevoGasto}) => {
 
     // Construir gasto
     const gasto = {
-      nombreGasto,
-      cantidadGasto,
+      nombre,
+      cantidad,
       id: shortid.generate()
     }
 
     
     // Pasar el gasto al componente principal
-    agregarNuevoGasto(gasto);
+    guardarGasto(gasto);
+    guardarCrearGasto(true);
 
 
     // Limpiar formulario
     guardarNombre('');
-    guardarGasto(0);
+    guardarCantidad(0);
   }
 
   
@@ -56,7 +57,7 @@ const Formulario = ({agregarNuevoGasto}) => {
           type="text"
           className="u-full-width"
           placeholder="Ej. Transporte"
-          value={nombreGasto}
+          value={nombre}
           onChange={e => guardarNombre(e.target.value)}
         />
       </div>
@@ -67,8 +68,8 @@ const Formulario = ({agregarNuevoGasto}) => {
             type="number" 
             className="u-full-width" 
             placeholder="Ej. 300" 
-            value={cantidadGasto}
-            onChange={e => guardarGasto(parseInt(e.target.value, 10))}
+            value={cantidad}
+            onChange={e => guardarCantidad(parseInt(e.target.value, 10))}
             
         />
       </div>
